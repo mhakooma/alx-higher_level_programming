@@ -1,5 +1,13 @@
 #!/usr/bin/python3
+
+import sys
+
+length = len(sys.argv)
+summ = 0
 if __name__ == "__main__":
-    import sys
-    result = sum(int(sys.argv[x]) for x in range(1, len(sys.argv)))
-    print("{}".format(result))
+    if length == 1:
+        summ = 0
+    else:
+        for i in range(1, length):
+            summ += int(sys.argv[i])
+    print("{:d}".format(summ))
