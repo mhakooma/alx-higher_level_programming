@@ -1,24 +1,25 @@
 #!/usr/bin/python3
-# gets all states via python yee boi with N
+"""
+a script that lists all states with a
+name starting with N (upper N) from the
+database hbtn_0e_0_usa
+hbtn_0e_0_usa is to be created by 0-select_states.sql
+"""
 
-
-def main(args):
-    # gets all state stuff by N
-    if len(args) != 4:
-        raise Exception("need 3 arguments!")
-    db = MySQLdb.connect(host='localhost',
-                         user=args[1],
-                         passwd=args[2],
-                         db=args[3])
-    cur = db.cursor()
-    cur.execute(
-        "SELECT * FROM states WHERE name like binary 'N%' ORDER BY id ASC")
-    states = cur.fetchall()
-    for state in states:
-        print(state)
-
+import MySQLdb
+from sys import argv
 
 if __name__ == "__main__":
-    import sys
-    import MySQLdb
-    main(sys.argv)
+    db = MySQLdb.connect(host="localhost",
+                         port=3306,
+                         user=argv[1],
+                         password=argv[2],
+                         database=argv[3])
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM states WHERE name LIKE\
+    'N%' ORDER BY states.id ASC;")
+    for i in cursor.fetchall():
+        if i[1][0] == "N":
+            print(i)
+
+    db.close()

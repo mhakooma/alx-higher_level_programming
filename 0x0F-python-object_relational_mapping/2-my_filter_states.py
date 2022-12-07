@@ -1,26 +1,25 @@
 #!/usr/bin/python3
-# gets all states via python yee boi with your own state
+"""
+a script that takes in an argument and displays all
+values in the states table of hbtn_0e_0_usa where
+name matches the argument
+hbtn_0e_0_usa is to be created by 0-select_states.sql
+"""
 
-
-def main(args):
-    # gets all state stuff by N
-    if len(args) != 5:
-        raise Exception("need 4 arguments!")
-    db = MySQLdb.connect(host='localhost',
-                         user=args[1],
-                         passwd=args[2],
-                         db=args[3])
-    cur = db.cursor()
-    cur.execute(
-        "SELECT * FROM states WHERE name LIKE '{}' ORDER BY id ASC"
-        .format(args[4]))
-    states = cur.fetchall()
-    for state in states:
-        if state[1] == args[4]:
-            print(state)
-
+import MySQLdb
+from sys import argv
 
 if __name__ == "__main__":
-    import sys
-    import MySQLdb
-    main(sys.argv)
+    db = MySQLdb.connect(host="localhost",
+                         port=3306,
+                         user=argv[1],
+                         password=argv[2],
+                         database=argv[3])
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM states WHERE name LIKE\
+    '{:s}' ORDER BY states.id ASC;".format(argv[4]))
+    for i in cursor.fetchall():
+        if i[1] == argv[4]:
+            print(i)
+
+    db.close()

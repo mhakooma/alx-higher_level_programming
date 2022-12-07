@@ -1,25 +1,23 @@
 #!/usr/bin/python3
-# gets all CITIES
+"""
+a script that lists all cities from the
+database hbtn_0e_4_usa
+hbtn_0e_0_usa is to be created by 0-select_states.sql
+"""
 
-
-def main(args):
-    # gets all CITY stuff
-    if len(args) != 4:
-        raise Exception("need 3 arguments!")
-    db = MySQLdb.connect(host='localhost',
-                         user=args[1],
-                         passwd=args[2],
-                         db=args[3])
-    cur = db.cursor()
-    cur.execute("SELECT c.id,\
-                c.name, s.name FROM cities c\
-                JOIN states s ON s.id=c.state_id ORDER BY c.id")
-    states = cur.fetchall()
-    for state in states:
-        print(state)
-
+import MySQLdb
+from sys import argv
 
 if __name__ == "__main__":
-    import sys
-    import MySQLdb
-    main(sys.argv)
+    db = MySQLdb.connect(host="localhost",
+                         port=3306,
+                         user=argv[1],
+                         password=argv[2],
+                         database=argv[3])
+    cursor = db.cursor()
+    cursor.execute("SELECT cities.id, cities.name\
+    FROM cities ORDER BY cities.id ASC;")
+    for i in cursor.fetchall():
+        print(i)
+
+    db.close()

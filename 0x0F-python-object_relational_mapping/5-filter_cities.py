@@ -1,23 +1,28 @@
 #!/usr/bin/python3
-# gets all CITIES
+"""
+a script that takes in the name of a state as an
+argument and lists all cities of that state, using
+the database hbtn_0e_4_usa, safe from SQL Injection
+hbtn_0e_0_usa is to be created by 0-select_states.sql
+"""
 
-
-def main(args):
-    # gets all CITY stuff
-    if len(args) != 5:
-        raise Exception("need 4 arguments!")
-    db = MySQLdb.connect(host='localhost',
-                         user=args[1],
-                         passwd=args[2],
-                         db=args[3])
-    cur = db.cursor()
-    cur.execute("SELECT c.name FROM cities\
-            c JOIN states s ON s.id=c.state_id\
-            WHERE s.name=%s ORDER BY c.id", (args[4],))
-    states = cur.fetchall()
-    print(", ".join(map(lambda x: "%s" % x, states)))
+import MySQLdb
+from sys import argv
 
 if __name__ == "__main__":
-    import sys
-    import MySQLdb
-    main(sys.argv)
+    db = MySQLdb.connect(host="localhost",
+                         port=3306,
+                         user=argv[1],
+                         password=argv[2],
+                         database=argv[3])
+    cursor = db.cursor()
+    data = """SELECT cities.name
+                 FROM states
+                 INNER JOIN cities ON states.id = cities.state_id
+                 WHERE states.name LIKE %s
+                 ORDER BY cities.id ASC"""
+    cursor.execute(data, (argv[4], ))
+
+    print(', '.join(["{:s}".format(row[0]) for row in cursor.fetchall()]))
+
+    db.close()

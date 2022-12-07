@@ -1,19 +1,26 @@
 #!/usr/bin/python3
-# sql alchemy 7
-from sqlalchemy import create_engine
-from sqlalchemy import MetaData
-from sqlalchemy.orm import sessionmaker
+"""Start link class to table in database
+"""
+
+from sys import argv
 from model_state import Base, State
 from model_city import City
-import sys
-
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 if __name__ == "__main__":
-    engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'.format(
-        sys.argv[1], sys.argv[2], sys.argv[3]), pool_pre_ping=True)
+    user = argv[1]
+    passwd = argv[2]
+    db = argv[3]
+
+    engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'.
+                           format(user, passwd, db), pool_pre_ping=True)
     Base.metadata.create_all(engine)
     Session = sessionmaker(bind=engine)
     session = Session()
-    for s, c in session.query(State, City).join(City).order_by(City.id):
-            print("{}: ({}) {}".format(s.name, c.id, c.name))
+
+    for q in session.query(State.name, City.id, City.name).filter(
+            State.id == City.state_id).order_by(City.id):
+        print("{:s}: ({:d}) {:s}".format(q[0], q[1], q[2]))
+
     session.close()
