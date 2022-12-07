@@ -1,24 +1,18 @@
 #!/usr/bin/python3
-# gets all states via python yee boi with N
+"""lists all states with a name starting with N
+(upper N) from the database hbtn_0e_0_usa"""
 
+if __name__ == '__main__':
 
-def main(args):
-    # gets all state stuff by N
-    if len(args) != 4:
-        raise Exception("need 3 arguments!")
-    db = MySQLdb.connect(host='localhost',
-                         user=args[1],
-                         passwd=args[2],
-                         db=args[3])
-    cur = db.cursor()
-    cur.execute(
-        "SELECT * FROM states WHERE name like binary 'N%' ORDER BY id ASC")
-    states = cur.fetchall()
-    for state in states:
-        print(state)
-
-
-if __name__ == "__main__":
-    import sys
     import MySQLdb
-    main(sys.argv)
+    import sys
+
+    db = MySQLdb.connect(host='localhost', port=3306,
+                         user=sys.argv[1], passwd=sys.argv[2], db=sys.argv[3])
+
+    cur = db.cursor()
+    cur.execute("""SELECT * FROM states WHERE name
+                LIKE BINARY 'N%' ORDER BY states.id ASC""")
+    rows = cur.fetchall()
+    for row in rows:
+        print(row)

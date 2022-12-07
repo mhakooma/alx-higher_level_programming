@@ -1,17 +1,18 @@
 #!/usr/bin/python3
-# sql alchemy awesome
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+"""Definition of the State class with relationship to City"""
 
-Base = declarative_base()
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship
+from relationship_city import City, Base
 
 
 class State(Base):
-    # creates state
-    __tablename__ = 'states'
+    """Class State"""
 
-    id = Column(Integer, primary_key=True, nullable=False)
+    __tablename__ = 'states'
+    id = Column(Integer, autoincrement=True,
+                primary_key=True, nullable=False, unique=True)
     name = Column(String(128), nullable=False)
-    cities = relationship("City", backref="state",
-                          cascade="all, delete-orphan")
+    cities = relationship('City', backref='state',
+                          cascade='all, delete-orphan')
