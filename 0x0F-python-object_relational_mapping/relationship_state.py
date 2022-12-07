@@ -1,25 +1,18 @@
 #!/usr/bin/python3
-"""
-contains the state model
-class State
-inherits from Base
-"""
+"""Definition of the State class with relationship to City"""
 
-
-from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
-# from relationship_city import City
-
-Base = declarative_base()
+from relationship_city import City, Base
 
 
 class State(Base):
-    """
-    Class State; instance of Base
-    Linked to MySQL table "states"
-    """
-    __tablename__ = "states"
-    id = Column(Integer, nullable=False, primary_key=True)
+    """Class State"""
+
+    __tablename__ = 'states'
+    id = Column(Integer, autoincrement=True,
+                primary_key=True, nullable=False, unique=True)
     name = Column(String(128), nullable=False)
-    cities = relationship("City", backref="state")
+    cities = relationship('City', backref='state',
+                          cascade='all, delete-orphan')
