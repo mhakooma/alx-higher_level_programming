@@ -1,4 +1,5 @@
 #!/usr/bin/node
-console.log('C is fun');
-console.log('Python is cool');
-console.log('JavaScript is amazing');
+let words = ['C is fun', 'Python is cool', 'Javascript is amazing'];
+for (let i = 0; i < words.length; i++) {
+  console.log(words[i]);
+}
