@@ -1,13 +1,13 @@
 #!/usr/bin/python3
-""" print error code """
+"""
+Python Script that takes in a URL, sends a request to the URL
+& displays the body of the response
+"""
 import requests
-import sys
+from sys import argv
 
-
-if __name__ == "__main__":
-    r = requests.get(sys.argv[1])
-    try:
-        r.raise_for_status()
-        print(r.text)
-    except requests.exceptions.HTTPError as e:
-        print("Error code: {}".format(r.status_code))
+if __name__ == '__main__':
+    r = requests.get(argv[1])
+    status = r.status_code
+    print(r.text) if status < 400 else print(
+        "Error code: {}".format(r.status_code))
